@@ -49,7 +49,6 @@
       const axisHelper = new THREE.AxisHelper(200,50);
       scene.add(axisHelper);
 
-        <script>
   var init = function() {
 
     var width = 800,
@@ -61,7 +60,7 @@
     document.body.appendChild(renderer.domElement);
   
     // シーンを作成
-    var scene = new THREE.Scene();
+    //var scene = new THREE.Scene();
   
     // カメラを作成(画角、縦横比、カメラからの距離前、後）
     var camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
@@ -221,7 +220,7 @@
     update();
   }
   window.addEventListener('DOMContentLoaded', init);
-</script>
+
         
         // 木0をスプライトで作成
         var textureLoader = new THREE.TextureLoader();  
