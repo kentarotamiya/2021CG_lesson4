@@ -96,5 +96,180 @@
 
   <body>
     <canvas id="myCanvas"></canvas>
+    
+    <script>
+  var init = function() {
+
+    var width = 800,
+        height = 600;
+  
+    // レンダラーを作成
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height);
+    document.body.appendChild(renderer.domElement);
+  
+    // シーンを作成
+    var scene = new THREE.Scene();
+  
+    // カメラを作成(画角、縦横比、カメラからの距離前、後）
+    var camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+　  // カメラの座標
+　   camera.position.set( 0, 2, 5);
+     camera.lookAt(new THREE.Vector3(0, 1, 0));
+  
+    // 平面を作成
+    var planeGeometry = new THREE.PlaneGeometry(5,5,5,5);
+    var planeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+    plane.rotation.set( -Math.PI/2, 0, 0 );
+    plane.position.set(0,0,0);
+
+    //XYZ軸の表示（長さ）
+    var axis = new THREE.AxisHelper(5);
+    axis.position.set(0,-0.8,0);             
+
+
+    // 頭を作成
+    var head_g = new THREE.SphereGeometry( 0.57, 32, 32 );
+    var material_b = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+    var head = new THREE.Mesh(head_g, material_b);
+    head.scale.z =0.6;
+    head.position.set(0,0.05,-1.2);//allの中心が原点になる
+
+    //体を作成
+    var body_g = new THREE.SphereGeometry( 0.65, 32, 32 );
+    var material_r = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    var body = new THREE.Mesh( body_g, material_r);
+    body.scale.z =1.8;
+    body.position.set(0,0,0);
+
+    //左前足を作成
+    var leg_g = new THREE.SphereGeometry( 0.25, 32, 32 );
+    var material_l = new THREE.MeshPhongMaterial({ color: 0x770077 });
+    var f_lleg = new THREE.Mesh( leg_g, material_l);
+    f_lleg.scale.x = 0.4;
+    f_lleg.scale.y = 1.2;
+    f_lleg.scale.z = 0.4;
+    f_lleg.rotation.x = 0.25;
+    f_lleg.rotation.z = -0.25;
+    f_lleg.position.set(-0.3,-0.6,-0.65);
+
+    //右前足を作成
+    var f_rleg = new THREE.Mesh( leg_g, material_l);
+    f_rleg.scale.x = 0.4;
+    f_rleg.scale.y = 1.2;
+    f_rleg.scale.z = 0.4;
+    f_rleg.rotation.x = 0.25;
+    f_rleg.rotation.z = 0.25;
+    f_rleg.position.set(0.3,-0.6,-0.65);
+    
+    //左後足を作成
+    var b_lleg = new THREE.Mesh( leg_g, material_l);
+    b_lleg.scale.x = 0.4;
+    b_lleg.scale.y = 1.2;
+    b_lleg.scale.z = 0.4;
+    b_lleg.rotation.x = -0.25;
+    b_lleg.rotation.z = -0.25;
+    b_lleg.position.set(-0.3,-0.6,0.65);
+    
+    //右後足を作成
+    var b_rleg = new THREE.Mesh( leg_g, material_l);
+    b_rleg.scale.x = 0.4;
+    b_rleg.scale.y = 1.2;
+    b_rleg.scale.z = 0.4;
+    b_rleg.rotation.x = -0.25;
+    b_rleg.rotation.z = 0.25;
+    b_rleg.position.set(0.3,-0.6,0.65);
+
+    //鼻の作成
+    var nose_g = new THREE.CylinderGeometry( 0.15, 0.15, 0.1, 32 );
+    var material_nose = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+    var nose = new THREE.Mesh( nose_g, material_nose);
+    nose.rotation.x = -1.5;
+    nose.position.set(0,-0.04,-1.53);
+
+    //左目の作成
+    var eye_g = new THREE.SphereGeometry( 0.1, 32, 32 );
+    var material_eye = new THREE.MeshPhongMaterial({ color: 0xffffff });
+    var r_eye = new THREE.Mesh( eye_g, material_eye);
+    r_eye.position.set(0.2,0.2,-1.47);
+
+    //右目の作成
+    var l_eye = new THREE.Mesh( eye_g, material_eye);
+    l_eye.position.set(-0.2,0.2,-1.47);
+    
+    //左耳の作成
+    var ear_g = new THREE.ConeGeometry( 0.17, 0.4, 32 );//0.15
+    var material_ear = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+    var lear = new THREE.Mesh( ear_g, material_ear);
+    lear.scale.z =0.8;
+    lear.rotation.z = 0.45;//0.47
+    lear.position.set(-0.4,0.5,-1.2);
+    
+    //右耳の作成
+    var rear = new THREE.Mesh( ear_g, material_ear);
+    rear.scale.z =0.8;
+    rear.rotation.z = -0.45;
+    rear.position.set(0.4,0.5,-1.2);
+    
+    //尻尾の作成
+    var tail_g = new THREE.CylinderGeometry( 0.05, 0.01, 0.5, 32 );
+    var material_tail = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+    var tail = new THREE.Mesh( tail_g, material_tail);
+    tail.rotation.x = -1.5;
+    tail.position.set(0,0,1.1);
+
+     //ブタのオブジェクト
+   const pig = new THREE.Group();
+     pig.add(axis);
+     pig.add(head); // 頭を追加
+     pig.add(body); //体を追加
+     pig.add(f_lleg); //左前足を追加
+     pig.add(f_rleg); //右前足を追加
+     pig.add(b_lleg); //左後足を追加
+     pig.add(b_rleg); //右後足を追加
+     pig.add(nose); //鼻を追加
+     pig.add(r_eye); //右目を追加
+     pig.add(l_eye); //左目を追加
+     pig.add(rear); //右耳追加
+     pig.add(lear); //左耳を追加
+     pig.add(tail); //尻尾を追加
+     pig.position.set(0,1,0);//ブタグループの原点の位置
+   
+
+     //全体のオブジェクト
+
+    const all = new THREE.Group();
+     all.add(plane);//平面を追加
+     all.add(pig); // ブタを追加
+     all.position.set(0,0,-5);//全体グループの原点の位置
+    scene.add(all); 
+  
+    // 平行光源1
+    var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+    directionalLight1.position.set(1, 1, 1);
+    // シーンに追加
+    scene.add(directionalLight1);
+    // 平行光源2
+        var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+    directionalLight2.position.set(-1, 1, 1);
+    // シーンに追加
+    scene.add(directionalLight2);
+  
+    // 初回実行
+    var update = function() {
+      requestAnimationFrame(update);
+  
+      // 全体を回転させる
+        //all.rotation.x += 0.01;
+        //all.rotation.y += 0.005;;
+  
+      renderer.render(scene, camera);
+    };
+    update();
+  }
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+    
   </body>
 </html>
