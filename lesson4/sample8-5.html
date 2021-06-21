@@ -69,8 +69,8 @@
 
     // 頭を作成
     var head_g = new THREE.SphereGeometry( 0.57, 32, 32 );
-    var material_b = new THREE.MeshPhongMaterial({ color: 0x0000ff });
-    var head = new THREE.Mesh(head_g, material_b);
+    //var material_b = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+    var head = new THREE.Mesh(head_g, mat);
     head.scale.z =0.6;
     head.position.set(0,0.05,-1.2);//allの中心が原点になる
 
